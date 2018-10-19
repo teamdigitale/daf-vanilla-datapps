@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: daf-skeleton
+  labels:
+    app: daf-skeleton
+spec:
+  ports:
+  - port: 5000
+  selector:
+    app: daf-skeleton
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: daf-skeleton-deployment
+spec:
+  replicas: 1
+  strategy:
+      type: Recreate
+  template:
+    metadata:
+      labels:
+        app: daf-skeleton
+    spec:
+      containers:
+      - name: daf-skeleton
+        image: nexus.teamdigitale.test/daf-skeleton:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: client
+          containerPort: 5000
+        securityContext:
+          privileged: true
+          runAsUser: 0
